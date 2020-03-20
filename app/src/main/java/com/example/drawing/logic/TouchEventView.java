@@ -25,8 +25,10 @@ public class TouchEventView extends View {
     private Path currentPath = new Path();
     LinkedList<Path> pathList = new LinkedList<>();
     LinkedList<Integer> color = new LinkedList<>();
+    LinkedList<Float> strokewidth = new LinkedList<>();
 
     int currentColor = Color.BLACK;
+    float currentStrokeWidth = 6f;
 
     Context context;
     GestureDetector gestureDetector;
@@ -38,7 +40,7 @@ public class TouchEventView extends View {
         this.context = context;
 
         paint.setAntiAlias(true);
-        paint.setStrokeWidth(6f);
+        paint.setStrokeWidth(currentStrokeWidth);
         paint.setColor(currentColor);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
@@ -47,6 +49,18 @@ public class TouchEventView extends View {
     public void setColor(int red, int green, int blue) {
         currentColor = Color.rgb(red, green, blue);
         currentPath = new Path();
+    }
+
+    public void setStrokeWidth(float strokeWidth) {
+        currentStrokeWidth = strokeWidth;
+        currentPath = new Path();
+    }
+
+    public void clearScreen() {
+        pathList.clear();
+        color.clear();
+        strokewidth.clear();
+        invalidate();
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -58,8 +72,7 @@ public class TouchEventView extends View {
 
             //clean drawing area on double tap
          //   completedPaths.reset();
-            pathList.clear();
-            color.clear();
+            clearScreen();
 
             Log.d("Double Tap", "Tapped at: (" + x + "," + y + ")");
 
@@ -72,9 +85,9 @@ public class TouchEventView extends View {
         for (int i = 0; i < pathList.size(); i++)
         {
             paint.setColor(color.get(i));
+            paint.setStrokeWidth(strokewidth.get(i));
             canvas.drawPath(pathList.get(i), paint);
         }
-        //canvas.drawPath(currentPath, paint);
     }
 
     @Override
@@ -87,6 +100,7 @@ public class TouchEventView extends View {
                 currentPath.moveTo(eventX, eventY);
                 pathList.add(currentPath);
                 color.add(currentColor);
+                strokewidth.add(currentStrokeWidth);
                 break;
             case MotionEvent.ACTION_MOVE:
                 currentPath.lineTo(eventX, eventY);

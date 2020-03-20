@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Drawing</string>
+    <string-array name="Farbwerte">
+        <item>schwarz</item>
+        <item>blau</item>
+        <item>grün</item>
+        <item>rot</item>
+    </string-array>
+
+    <string-array name="Stiftstaerke">
+        <item>dünn</item>
+        <item>normal</item>
+        <item>dick</item>
+        <item>fett</item>
+    </string-array>
 </resources>
